@@ -1,0 +1,124 @@
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nanum+Myeongjo&display=swap");
+
+body {
+  overflow: hidden;
+}
+
+.home {
+  /* min-height: 100vh; */
+  font-family: "Gowun Dodum", sans-serif;
+  font-weight: 400;
+  /* background: #0af; */
+}
+.container {
+  width: 100%;
+}
+.main-des {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -40%);
+  font-size: 2rem;
+}
+
+.p-1,
+.p-2,
+.p-3 {
+  animation: fadeInUp 3s;
+  -moz-animation: fadeInUp 3s; /* Firefox */
+  -webkit-animation: fadeInUp 3s; /* Safari and Chrome */
+}
+
+.p-2 {
+  opacity: 0;
+  animation-delay: 1s;
+  animation-fill-mode: forwards;
+}
+
+.p-3 {
+  opacity: 0;
+  animation-delay: 2s;
+  animation-fill-mode: forwards;
+}
+
+.wave.container {
+  /* width: 300px;
+  height: 300px; */
+  border-radius: 5px;
+  background: #0af;
+  position: absolute;
+  /* bottom: 0%; */
+  transform: translate3d(0, 0, 0);
+}
+
+.wave {
+  opacity: 0.4;
+  position: absolute;
+  /* top: 80vh; */
+  /* left: 50%; */
+  width: 2500px;
+  height: 2500px;
+  margin-left: -20vw;
+  margin-top: -110vh;
+  transform-origin: 50% 53%;
+  border-radius: 43%;
+  background: white;
+  animation: drift 8000ms infinite linear;
+}
+
+/* .wave.label-1 {
+  animation: drift 6500ms infinite linear;
+  
+} */
+
+.wave.label-2 {
+  animation: drift 8100ms infinite linear;
+  /* background: #0af; */
+  background: white;
+  z-index: -2;
+}
+
+.wave.label-3 {
+  animation: drift 8500ms infinite linear;
+  opacity: 0.1;
+  background: yellow;
+  z-index: -1;
+}
+
+.home:after {
+  content: "";
+  display: block;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(#e8a, 1),
+    rgba(#def, 0) 80%,
+    rgba(white, 0.5)
+  );
+  z-index: 11;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes drift {
+  from {
+    transform: rotate(0deg);
+  }
+  from {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(+10vh);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
