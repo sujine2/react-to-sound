@@ -15,16 +15,20 @@ body {
   width: 100%;
 }
 .main-des {
+  text-align: center;
   position: absolute;
   left: 50%;
   top: 40%;
   transform: translate(-50%, -40%);
   font-size: 2rem;
+  z-index: 5;
 }
 
 .p-1,
 .p-2,
-.p-3 {
+.p-3,
+.p-4,
+.microphone-img {
   animation: fadeInUp 3s;
   -moz-animation: fadeInUp 3s; /* Firefox */
   -webkit-animation: fadeInUp 3s; /* Safari and Chrome */
@@ -42,11 +46,21 @@ body {
   animation-fill-mode: forwards;
 }
 
+.p-4 {
+  opacity: 0;
+  animation-delay: 3s;
+  animation-fill-mode: forwards;
+}
+
+.microphone-img {
+  opacity: 0;
+  animation-delay: 4s;
+  animation-fill-mode: forwards;
+}
+
 .wave.container {
-  /* width: 300px;
-  height: 300px; */
   border-radius: 5px;
-  background: #0af;
+  background: linear-gradient(to bottom, white, rgb(40, 160, 224));
   position: absolute;
   /* bottom: 0%; */
   transform: translate3d(0, 0, 0);
@@ -67,23 +81,17 @@ body {
   animation: drift 8000ms infinite linear;
 }
 
-/* .wave.label-1 {
-  animation: drift 6500ms infinite linear;
-  
-} */
-
 .wave.label-2 {
   animation: drift 8100ms infinite linear;
-  /* background: #0af; */
-  background: white;
-  z-index: -2;
+  z-index: -5;
 }
 
 .wave.label-3 {
   animation: drift 8500ms infinite linear;
-  opacity: 0.1;
-  background: yellow;
-  z-index: -1;
+  opacity: 0.2;
+  background: white;
+  /* background: white; */
+  z-index: -2;
 }
 
 .home:after {
@@ -93,14 +101,23 @@ body {
   top: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(#e8a, 1),
-    rgba(#def, 0) 80%,
-    rgba(white, 0.5)
-  );
-  z-index: 11;
+  background: white;
   transform: translate3d(0, 0, 0);
+}
+
+.microphone-img {
+  fill: rgb(149, 207, 239);
+  height: 5vh;
+  box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9,
+    5px 5px 20px 0px #0002, 3px 3px 4px 0px #0001;
+  border-radius: 50%;
+}
+
+.microphone-img:hover {
+  box-shadow: 0px 0px 0px 0px #fff9;
+}
+
+.microphone-img-path:hover {
 }
 
 @keyframes drift {
