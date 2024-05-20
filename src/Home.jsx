@@ -3,6 +3,11 @@ import "./Home.css";
 function Home() {
   return (
     <div className="home">
+      <div class="container wave">
+        <div class="wave label-1"></div>
+        <div class="wave label-2"></div>
+        <div class="wave label-3"></div>
+      </div>
       <div className="container main-des">
         <div className="main-des">
           <p className="p-1">안녕하세요.</p>
@@ -16,12 +21,6 @@ function Home() {
             />
           </svg>
         </div>
-      </div>
-
-      <div class="container wave">
-        <div class="wave label-1"></div>
-        <div class="wave label-2"></div>
-        <div class="wave label-3"></div>
       </div>
     </div>
   );
