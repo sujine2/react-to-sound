@@ -38,9 +38,9 @@ export async function OpenSocket() {
 
     let audioBuffers = [];
     let audioBuffer = [];
-    let nextTimeToSend = Date.now() + 1000;
+    let nextTimeToSend = Date.now() + 5000;
     workletNode.port.onmessage = (event) => {
-      if (audioBuffer.length >= 256) {
+      if (audioBuffer.length >= 480) {
         audioBuffers.push(audioBuffer);
         audioBuffer = [];
       }
