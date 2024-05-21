@@ -1,8 +1,10 @@
 import "./Home.css";
 import { useEffect, useState } from "react";
+import { OpenSocket, CloseSocket } from "./Socket.jsx";
 
 function Home() {
   const [isRecording, setIsRecording] = useState(false);
+
   useEffect(() => {
     document
       .querySelector(".mic-img")
@@ -23,8 +25,13 @@ function Home() {
   }, []);
 
   const updateRecordingState = () => {
-    if (isRecording) setIsRecording(false);
-    else setIsRecording(true);
+    if (isRecording) {
+      CloseSocket();
+      setIsRecording(false);
+    } else {
+      setIsRecording(true);
+      OpenSocket().catch(console.error);
+    }
   };
 
   return (
