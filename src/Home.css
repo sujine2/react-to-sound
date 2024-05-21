@@ -69,12 +69,9 @@ body {
   align-items: center;
   bottom: 14vh;
   display: table;
-
-  /* transition: all 0.2s linear; */
 }
 
 .mic-img {
-  fill: rgb(149, 207, 239);
   height: clamp(40px, 15vw, 50px);
   border-radius: 50%;
   transition: all 0.2s linear;
@@ -96,12 +93,16 @@ body {
   opacity: 0;
   text-align: center;
   padding: 10px;
-  /* width: clamp(100px, 10vw, 200px); */
+  transition: all 0.2s linear;
   border-radius: 30px;
   margin-left: 1%;
   margin-right: 1%;
   background: rgba(255, 255, 255, 0.3);
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+
+.mic-img:hover {
+  fill: rgb(96, 189, 239);
 }
 
 .mic-img:hover ~ .item {
