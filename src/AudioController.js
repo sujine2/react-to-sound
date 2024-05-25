@@ -76,18 +76,13 @@ export class AudioController {
   }
 
   disconnectAudioNodes() {
-    if (this.#source != undefined) {
-      this.#source.disconnect();
-    }
-    if (this.#workletNode != undefined) {
-      this.#workletNode.disconnect();
-    }
+    if (this.#source != undefined) this.#source.disconnect();
+    if (this.#workletNode != undefined) this.#workletNode.disconnect();
     if (
       this.#audioContext != undefined &&
       this.#audioContext.state == "running"
-    ) {
+    )
       this.#audioContext.close().then(() => {});
-    }
 
     console.log(
       "All audio resources have been released and audio processing stopped."
