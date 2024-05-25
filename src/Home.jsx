@@ -1,9 +1,30 @@
 import "./Home.css";
-import { useEffect, useState } from "react";
-import { OpenSocket, CloseSocket } from "./Socket.jsx";
+import { useEffect, useState, useRef } from "react";
+import { AudioController } from "./AudioController.js";
 
 function Home() {
   const [isRecording, setIsRecording] = useState(false);
+  const [isSocketClosed, setIsSocketClosed] = useState(false);
+  const socketRef = useRef(null);
+  const audioControllerRef = useRef(null);
+
+  useEffect(() => {
+    if (isSocketClosed || !socketRef.current) {
+      socketRef.current = new WebSocket(process.env.REACT_APP_SOCKET_API);
+      socketRef.current.onopen = () => console.log("WebSocket Connected");
+      socketRef.current.onerror = (error) =>
+        console.error("socket Error:", error);
+      socketRef.current.onclose = (event) => {
+        console.log(event);
+        setIsSocketClosed(true);
+        console.log("WebSocket Closed");
+      };
+      socketRef.current.onmessage = function (event) {
+        console.log("Message from server:", event.data);
+      };
+      audioControllerRef.current = new AudioController(socketRef.current);
+    }
+  }, []);
 
   useEffect(() => {
     document
@@ -21,16 +42,27 @@ function Home() {
           item.style.opacity = "0";
         });
       });
-    console.log("Component has mounted");
   }, []);
 
-  const updateRecordingState = () => {
+  const updateRecordingState = async () => {
     if (isRecording) {
-      CloseSocket();
+      audioControllerRef.current.disconnectAudioNodes();
+      audioControllerRef.current.stopMediaStream();
       setIsRecording(false);
+      document.querySelector(".recording").style.display = "none";
     } else {
-      setIsRecording(true);
-      OpenSocket().catch(console.error);
+      console.log(socketRef.current.readyState);
+      if (socketRef.current) {
+        if (
+          socketRef.current.readyState == WebSocket.CONNECTING ||
+          socketRef.current.readyState == WebSocket.OPEN
+        ) {
+          setIsRecording(true);
+          document.querySelector(".recording").style.display = "flex";
+          await audioControllerRef.current.initialize();
+          audioControllerRef.current.sendRawAudioStream();
+        }
+      }
     }
   };
 
@@ -50,6 +82,16 @@ function Home() {
         </div>
       </div>
       <div></div>
+      <div className="recording">
+        <div className="obj"></div>
+        <div className="obj"></div>
+        <div className="obj"></div>
+        <div className="obj"></div>
+        <div className="obj"></div>
+        <div className="obj"></div>
+        <div className="obj"></div>
+        <div className="obj"></div>
+      </div>
       <div className="container nav-bar">
         <div className="center">
           <svg
