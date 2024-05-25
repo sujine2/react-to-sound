@@ -4,6 +4,7 @@ import { AudioController } from "./AudioController.js";
 
 function Home() {
   const [isRecording, setIsRecording] = useState(false);
+  const [restore, setRestore] = useState(false);
   const [isSocketClosed, setIsSocketClosed] = useState(false);
   const socketRef = useRef(null);
   const audioControllerRef = useRef(null);
@@ -16,6 +17,7 @@ function Home() {
         console.error("socket Error:", error);
       socketRef.current.onclose = (event) => {
         console.log(event);
+
         setIsSocketClosed(true);
         console.log("WebSocket Closed");
       };
@@ -49,6 +51,7 @@ function Home() {
       audioControllerRef.current.disconnectAudioNodes();
       audioControllerRef.current.stopMediaStream();
       setIsRecording(false);
+      setRestore(true);
       document.querySelector(".recording").style.display = "none";
     } else {
       console.log(socketRef.current.readyState);
@@ -58,6 +61,7 @@ function Home() {
           socketRef.current.readyState == WebSocket.OPEN
         ) {
           setIsRecording(true);
+          setRestore(false);
           document.querySelector(".recording").style.display = "flex";
           await audioControllerRef.current.initialize();
           audioControllerRef.current.sendRawAudioStream();
@@ -66,12 +70,18 @@ function Home() {
     }
   };
 
+  const getClassName = () => {
+    if (restore) return "container wave wave-down";
+    if (isRecording) return "container wave wave-up";
+    return "container wave";
+  };
+
   return (
     <div className="home">
-      <div class="container wave">
-        <div class="wave label-1"></div>
-        <div class="wave label-2"></div>
-        <div class="wave label-3"></div>
+      <div className={getClassName()}>
+        <div className="wave label-1"></div>
+        <div className="wave label-2"></div>
+        <div className="wave label-3"></div>
       </div>
       <div className="container main-des">
         <div className="main-des">

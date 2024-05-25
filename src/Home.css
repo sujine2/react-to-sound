@@ -121,11 +121,18 @@ body {
   /* left: 50%; */
   width: 2500px;
   height: 2500px;
-
   margin-left: -15vw;
   margin-top: -110vh;
   transform-origin: 50% 53%;
   border-radius: 43%;
+}
+
+.wave-up {
+  animation: waveUp 3s forwards;
+}
+
+.wave-down {
+  animation: waveDown 3s forwards;
 }
 
 .wave.label-1 {
@@ -208,6 +215,24 @@ body {
   }
   from {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes waveUp {
+  from {
+    transform: translateY(0vh);
+  }
+  to {
+    transform: translateY(-200vh);
+  }
+}
+
+@keyframes waveDown {
+  from {
+    transform: translateY(-200vh);
+  }
+  to {
+    transform: translateY(0vh);
   }
 }
 
