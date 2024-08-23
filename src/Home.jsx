@@ -1,41 +1,14 @@
 import "./Home.css";
+import { STATE } from "./const.js";
 import { useEffect, useState, useRef } from "react";
-import { AudioController } from "./AudioController.js";
+import VoiceColor from "./VoiceColor.jsx";
 
 function Home() {
-  const [isRecording, setIsRecording] = useState(false);
+  const [isVoiceColorRecording, setIsVoiceColorRecording] = useState(
+    STATE.READY
+  );
   const [restore, setRestore] = useState(false);
-  const [isSocketClosed, setIsSocketClosed] = useState(false);
-  const [bubbleColors, setBubbleColors] = useState([]);
-  const socketRef = useRef(null);
-  const audioControllerRef = useRef(null);
-
-  useEffect(() => {
-    if (isSocketClosed || !socketRef.current) {
-      socketRef.current = new WebSocket(process.env.REACT_APP_SOCKET_API);
-
-      socketRef.current.onopen = () => console.log("WebSocket Connected");
-      socketRef.current.onerror = (error) =>
-        console.error("socket Error:", error);
-      socketRef.current.onclose = (event) => {
-        console.log(event);
-        setIsSocketClosed(true);
-        console.log("WebSocket Closed");
-      };
-      socketRef.current.onmessage = function (event) {
-        try {
-          const data = JSON.parse(event.data)[0];
-          if (data.red !== 255 && data.green !== 255 && data.blue !== 255) {
-            const color = `rgb(${data.red}, ${data.green}, ${data.blue})`;
-            setBubbleColors((prev) => [...prev, color]);
-          }
-        } catch (e) {
-          console.log(event.data);
-        }
-      };
-      audioControllerRef.current = new AudioController(socketRef.current);
-    }
-  }, []);
+  const voiceColorRef = useRef(null);
 
   useEffect(() => {
     document
@@ -55,100 +28,33 @@ function Home() {
       });
   }, []);
 
-  useEffect(() => {
-    document.querySelectorAll("[data-lit-hue]").forEach((target) => {
-      const rect = target.getBoundingClientRect();
-      const hue = Number(target.getAttribute("data-lit-hue"));
-      const count = Number(target.getAttribute("data-lit-count") || 50);
-
-      if (bubbleColors.length > count && isRecording) {
-        console.log(bubbleColors);
-        bubbleColors.forEach((bubbleColor, index) => {
-          if (index < count) {
-            const x = randRange(0, rect.width);
-            const y = randRange(0, rect.height);
-            createBubble(x, y, rect, hue, target, bubbleColor);
-          }
-        });
-        setBubbleColors((prevColors) => prevColors.slice(100));
-      }
-    });
-  }, [bubbleColors]);
-
-  const clip = (v, min, max = Infinity) => {
-    if (v < min) return min;
-    else if (v > max) return max;
-    else return v;
-  };
-
-  // generated random value from given range
-  const randRange = (min, max) => Math.random() * max + min;
-
-  // create bubble on x and y position inside target with given hue theme
-  function createBubble(x, y, rect, hue, target, bubleColor) {
-    // variables
-    const size = randRange(5, rect.width / 5);
-
-    const animDuration = randRange(clip(size ** 2 / 1000, 1), 6);
-    const zIndex = Math.random() < 0.1 ? 2 : -1;
-    // apply to DOM
-    const circle = document.createElement("span");
-    circle.className = "lit";
-    circle.style.left = x + "px";
-    circle.style.top = y + "px";
-    circle.style.width = size + "px";
-    circle.style.height = size + "px";
-    circle.style.background = bubleColor;
-    circle.style.zIndex = zIndex;
-    circle.style.animationDuration = animDuration + "s";
-
-    circle.addEventListener("animationend", () => {
-      circle.remove(); // 애니메이션 완료 후 span 요소 제거
-    });
-
-    target.appendChild(circle);
-  }
-
   const updateRecordingState = async () => {
-    if (isRecording) {
-      audioControllerRef.current.disconnectAudioNodes();
-      audioControllerRef.current.stopMediaStream();
-      setIsRecording(false);
+    if (isVoiceColorRecording == STATE.START) {
+      setIsVoiceColorRecording(STATE.END);
       setRestore(true);
-      clearBubble();
+      console.log(isVoiceColorRecording);
       document.querySelector(".recording").style.display = "none";
       document.querySelector(".main-des").style.display = "block";
-      document.querySelector(".lit-container").style.display = "none";
     } else {
-      console.log(socketRef.current.readyState);
-
-      if (socketRef.current) {
+      if (voiceColorRef.current) {
+        const readyState = voiceColorRef.current.getSocketReadyState();
+        console.log(readyState);
         if (
-          socketRef.current.readyState == WebSocket.CONNECTING ||
-          socketRef.current.readyState == WebSocket.OPEN
+          readyState &&
+          (readyState == WebSocket.CONNECTING || readyState == WebSocket.OPEN)
         ) {
-          console.log("start", bubbleColors);
-          setIsRecording(true);
+          setIsVoiceColorRecording(STATE.START);
           setRestore(false);
           document.querySelector(".recording").style.display = "flex";
           document.querySelector(".main-des").style.display = "none";
-          document.querySelector(".lit-container").style.display = "block";
-
-          await audioControllerRef.current.initialize();
-          audioControllerRef.current.sendRawAudioStream();
         }
       }
     }
   };
 
-  const clearBubble = () => {
-    document.querySelectorAll(".lit").forEach((element) => element.remove());
-    setBubbleColors([]);
-  };
-
   const getClassName = () => {
     if (restore) return "container wave wave-down";
-    if (isRecording) return "container wave wave-up";
+    if (isVoiceColorRecording == STATE.START) return "container wave wave-up";
     return "container wave";
   };
 
@@ -166,11 +72,7 @@ function Home() {
           <p className="p-3">저는 소리에 반응해요.</p>
           <p className="p-4">저에 대해 무엇이든 물어보세요.</p>
         </div>
-        <div data-lit-hue="20" data-lit-count="100" class="lit-container">
-          <div class="minimal element">
-            <p>음성 색상을 확인해보세요.</p>
-          </div>
-        </div>
+        <VoiceColor ref={voiceColorRef} isRecording={isVoiceColorRecording} />
       </div>
 
       <div></div>
@@ -190,7 +92,9 @@ function Home() {
             className="mic-img"
             viewBox="3 1.5 13 13"
             onClick={updateRecordingState}
-            fill={isRecording ? "rgb(96, 189, 239)" : "rgb(149, 207, 239)"}
+            fill={
+              isVoiceColorRecording ? "rgb(96, 189, 239)" : "rgb(149, 207, 239)"
+            }
           >
             <path
               className="mic-img-path"
