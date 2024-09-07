@@ -1,5 +1,5 @@
-import "./Home.css";
-import { STATE } from "./const.js";
+import "../Home.css";
+import { STATE } from "../const.js";
 import {
   useEffect,
   useState,
@@ -7,7 +7,7 @@ import {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { AudioController } from "./AudioController.js";
+import { AudioController } from "../AudioController.js";
 
 function VoiceColor(props, ref) {
   const [isSocketClosed, setIsSocketClosed] = useState(false);
@@ -23,7 +23,7 @@ function VoiceColor(props, ref) {
         clearBubble();
       } else if (props.isRecording == STATE.START) {
         document.querySelector(".lit-container").style.display = "block";
-        await audioControllerRef.current.initialize();
+        await audioControllerRef.current.initialize32();
         audioControllerRef.current.sendRawAudioStream();
       }
     }
@@ -32,7 +32,7 @@ function VoiceColor(props, ref) {
 
   useEffect(() => {
     if (isSocketClosed || !socketRef.current) {
-      socketRef.current = new WebSocket(process.env.REACT_APP_SOCKET_API);
+      socketRef.current = new WebSocket(process.env.REACT_APP_VOICE_COLOR_URL);
 
       socketRef.current.onopen = () => console.log("WebSocket Connected");
       socketRef.current.onerror = (error) =>

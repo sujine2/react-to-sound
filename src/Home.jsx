@@ -1,14 +1,17 @@
 import "./Home.css";
 import { STATE } from "./const.js";
 import { useEffect, useState, useRef } from "react";
-import VoiceColor from "./VoiceColor.jsx";
+import VoiceColor from "./component/VoiceColor.jsx";
+import SpeechToText from "./component/SpeechToText.jsx";
 
 function Home() {
   const [isVoiceColorRecording, setIsVoiceColorRecording] = useState(
     STATE.READY
   );
+  const [isVoiceRecording, setIsVoiceRecording] = useState(STATE.READY);
   const [restore, setRestore] = useState(false);
   const voiceColorRef = useRef(null);
+  const voiceRef = useRef(null);
 
   useEffect(() => {
     document
@@ -28,7 +31,7 @@ function Home() {
       });
   }, []);
 
-  const updateRecordingState = async () => {
+  const startRecordingVoiceColor = async () => {
     if (isVoiceColorRecording == STATE.START) {
       setIsVoiceColorRecording(STATE.END);
       setRestore(true);
@@ -46,6 +49,25 @@ function Home() {
           setIsVoiceColorRecording(STATE.START);
           setRestore(false);
           document.querySelector(".recording").style.display = "flex";
+          document.querySelector(".main-des").style.display = "none";
+        }
+      }
+    }
+  };
+
+  const startRecordingVoice = async () => {
+    if (isVoiceRecording == STATE.START) {
+      setIsVoiceRecording(STATE.END);
+      document.querySelector(".main-des").style.display = "block";
+    } else {
+      if (voiceRef.current) {
+        const readyState = voiceRef.current.getSocketReadyState();
+        console.log(readyState);
+        if (
+          readyState &&
+          (readyState == WebSocket.CONNECTING || readyState == WebSocket.OPEN)
+        ) {
+          setIsVoiceRecording(STATE.START);
           document.querySelector(".main-des").style.display = "none";
         }
       }
@@ -72,6 +94,7 @@ function Home() {
           <p className="p-3">저는 소리에 반응해요.</p>
           <p className="p-4">저에 대해 무엇이든 물어보세요.</p>
         </div>
+        <SpeechToText ref={voiceRef} isRecording={isVoiceRecording} />
         <VoiceColor ref={voiceColorRef} isRecording={isVoiceColorRecording} />
       </div>
 
@@ -91,10 +114,8 @@ function Home() {
           <svg
             className="mic-img"
             viewBox="3 1.5 13 13"
-            onClick={updateRecordingState}
-            fill={
-              isVoiceColorRecording ? "rgb(96, 189, 239)" : "rgb(149, 207, 239)"
-            }
+            onClick={startRecordingVoice}
+            fill={isVoiceRecording ? "rgb(96, 189, 239)" : "rgb(149, 207, 239)"}
           >
             <path
               className="mic-img-path"
