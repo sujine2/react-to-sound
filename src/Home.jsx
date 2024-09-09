@@ -58,6 +58,8 @@ function Home() {
   const startRecordingVoice = async () => {
     if (isVoiceRecording == STATE.START) {
       setIsVoiceRecording(STATE.END);
+      setRestore(true);
+      document.querySelector(".recording").style.display = "none";
       document.querySelector(".main-des").style.display = "block";
     } else {
       if (voiceRef.current) {
@@ -68,6 +70,8 @@ function Home() {
           (readyState == WebSocket.CONNECTING || readyState == WebSocket.OPEN)
         ) {
           setIsVoiceRecording(STATE.START);
+          setRestore(false);
+          document.querySelector(".recording").style.display = "flex";
           document.querySelector(".main-des").style.display = "none";
         }
       }
@@ -77,6 +81,7 @@ function Home() {
   const getClassName = () => {
     if (restore) return "container wave wave-down";
     if (isVoiceColorRecording == STATE.START) return "container wave wave-up";
+    if (isVoiceRecording == STATE.START) return "container wave wave-up";
     return "container wave";
   };
 
@@ -87,7 +92,20 @@ function Home() {
         <div className="wave label-2"></div>
         <div className="wave label-3"></div>
       </div>
+
       <div className="container main-con">
+        {isVoiceRecording == STATE.START ? (
+          <>
+            <div className="wave-appear">
+              <div className="wave small label-1"></div>
+              <div className="wave small label-2"></div>
+              <div className="wave small label-3"></div>
+            </div>
+          </>
+        ) : null}
+        {/* <div className="wave small label-1"></div>
+        <div className="wave small label-2"></div>
+        <div className="wave small label-3"></div> */}
         <div className="main-des">
           <p className="p-1">안녕하세요.</p>
           <p className="p-2">저는 개발자 지니에요.</p>

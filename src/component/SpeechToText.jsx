@@ -64,11 +64,11 @@ function SpeechToText(props, ref) {
   return (
     <>
       {props.isRecording === STATE.START ? (
-        <div data-lit-hue="20" data-lit-count="100" className="lit-container">
-          <div className="minimal element">
-            <p>hi</p>
-          </div>
-        </div>
+        <div
+          data-lit-hue="20"
+          data-lit-count="100"
+          className="lit-container"
+        ></div>
       ) : (
         <div></div>
       )}

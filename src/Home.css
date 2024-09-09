@@ -24,6 +24,7 @@ body {
   z-index: 1;
   top: 25vh;
   position: absolute;
+  height: 25vh;
 }
 .main-des {
   z-index: 1;
@@ -116,6 +117,7 @@ span.lit {
   animation-delay: 4s;
   animation-fill-mode: forwards;
   position: absolute;
+  z-index: 20;
   /* display: flex; */
   /* justify-content: center; */
   align-items: center;
@@ -163,7 +165,7 @@ span.lit {
 
 .wave.container {
   border-radius: 5px;
-  position: absolute;
+  position: relative;
   transform: translate3d(0, 0, 0);
 }
 
@@ -175,7 +177,7 @@ span.lit {
   height: 2500px;
   /* width: 500px;
   height: 500px; */
-  margin-left: -15vw;
+  margin-left: -20vw;
   margin-top: -110vh;
 
   /* margin-left: 22vw;
@@ -184,6 +186,20 @@ span.lit {
   border-radius: 43%;
 }
 
+.wave.small {
+  width: clamp(600px, 40vw, 650px);
+  height: clamp(300px, 70vh, 650px);
+  /* width: 500px;
+  height: 500px; */
+  margin-left: 0vw;
+  margin-top: -20vh;
+
+  border-radius: 43%;
+}
+
+.wave-appear {
+  animation: waveAppear 2s forwards;
+}
 .wave-up {
   animation: waveUp 3s forwards;
 }
@@ -356,5 +372,14 @@ span.lit {
   }
   to {
     transform: translateY(-100vh);
+  }
+}
+
+@keyframes waveAppear {
+  0% {
+    transform: scaleX(0) scaleY(0);
+  }
+  100% {
+    transform: scaleX(1) scaleY(1);
   }
 }
