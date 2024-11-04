@@ -61,6 +61,7 @@ function Home() {
       setRestore(true);
       document.querySelector(".recording").style.display = "none";
       document.querySelector(".main-des").style.display = "block";
+      document.querySelector(".main-con").style.top = "10vh";
     } else {
       if (voiceRef.current) {
         const readyState = voiceRef.current.getSocketReadyState();
@@ -73,6 +74,7 @@ function Home() {
           setRestore(false);
           document.querySelector(".recording").style.display = "flex";
           document.querySelector(".main-des").style.display = "none";
+          document.querySelector(".main-con").style.top = "10vh";
         }
       }
     }
@@ -94,15 +96,6 @@ function Home() {
       </div>
 
       <div className="container main-con">
-        {isVoiceRecording == STATE.START ? (
-          <>
-            <div className="wave-appear">
-              <div className="wave small label-1"></div>
-              <div className="wave small label-2"></div>
-              <div className="wave small label-3"></div>
-            </div>
-          </>
-        ) : null}
         {/* <div className="wave small label-1"></div>
         <div className="wave small label-2"></div>
         <div className="wave small label-3"></div> */}

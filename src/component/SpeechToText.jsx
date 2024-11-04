@@ -11,6 +11,8 @@ import { AudioController } from "../AudioController.js";
 
 function SpeechToText(props, ref) {
   const [isSocketClosed, setIsSocketClosed] = useState(false);
+  const [request, setRequest] = useState(""); // result 상태 초기화
+  const [response, setResponse] = useState("");
   const socketRef = useRef(null);
   const audioControllerRef = useRef(null);
 
@@ -20,8 +22,10 @@ function SpeechToText(props, ref) {
         audioControllerRef.current.sendFinalRawAudioByteStream();
         audioControllerRef.current.disconnectAudioNodes();
         audioControllerRef.current.stopMediaStream();
+        setRequest("");
+        setResponse("");
       } else if (props.isRecording == STATE.START) {
-        document.querySelector(".lit-container").style.display = "block";
+        document.querySelector(".chat-container").style.display = "block";
         await audioControllerRef.current.initialize16();
         audioControllerRef.current.sendRawAudioByteStream();
       }
@@ -46,9 +50,16 @@ function SpeechToText(props, ref) {
       };
       socketRef.current.onmessage = function (event) {
         try {
-          console.log(event.data);
+          const data = JSON.parse(event.data);
+
+          const result = data.result;
+          const isResponse = data.response;
+
+          if (isResponse) setResponse(result);
+          else setRequest(result);
         } catch (e) {
           console.log(e);
+          console.log(event.data);
         }
       };
       audioControllerRef.current = new AudioController(socketRef.current);
@@ -64,11 +75,22 @@ function SpeechToText(props, ref) {
   return (
     <>
       {props.isRecording === STATE.START ? (
-        <div
-          data-lit-hue="20"
-          data-lit-count="100"
-          className="lit-container"
-        ></div>
+        <div className="chat-container">
+          <div className="chat-nav"></div>
+          <div className="chat-message-container">
+            {request !== "" ? (
+              <div className="chat-req-message">{request}</div>
+            ) : (
+              <></>
+            )}
+            {response !== "" ? (
+              <div className="chat-res-message">{response}</div>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="chat-enter"></div>
+        </div>
       ) : (
         <div></div>
       )}
