@@ -34,7 +34,7 @@ const checkAndInitializeToken = () => {
         } else console.error("토큰 초기화 실패:", error);
       });
   } else {
-    console.log("JWT 쿠키 확인됨:", jwt);
+    console.log("cookie", jwt);
   }
 };
 
@@ -172,16 +172,6 @@ function SpeechToText(props, ref) {
               </>
             ))}
             <div />
-            {/* {request !== "" ? (
-              <div className="chat-req-message">{request}</div>
-            ) : (
-              <></>
-            )}
-            {response !== "" ? (
-              <div className="chat-res-message">{response}</div>
-            ) : (
-              <></>
-            )} */}
           </div>
           <div className="chat-enter">
             <svg
