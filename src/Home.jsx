@@ -50,17 +50,19 @@ function Home() {
           setRestore(false);
           document.querySelector(".recording").style.display = "flex";
           document.querySelector(".main-des").style.display = "none";
+          document.querySelector(".mic-img").style.display = "none";
         }
       }
     }
   };
 
-  const startRecordingVoice = async () => {
+  const controlRecordingVoice = async () => {
     if (isVoiceRecording == STATE.START) {
       setIsVoiceRecording(STATE.END);
       setRestore(true);
       document.querySelector(".recording").style.display = "none";
       document.querySelector(".main-des").style.display = "block";
+      document.querySelector(".nav-bar").style.display = "block";
       document.querySelector(".main-con").style.top = "10vh";
     } else {
       if (voiceRef.current) {
@@ -74,6 +76,7 @@ function Home() {
           setRestore(false);
           document.querySelector(".recording").style.display = "flex";
           document.querySelector(".main-des").style.display = "none";
+          document.querySelector(".nav-bar").style.display = "none";
           document.querySelector(".main-con").style.top = "10vh";
         }
       }
@@ -105,7 +108,11 @@ function Home() {
           <p className="p-3">저는 소리에 반응해요.</p>
           <p className="p-4">저에 대해 무엇이든 물어보세요.</p>
         </div>
-        <SpeechToText ref={voiceRef} isRecording={isVoiceRecording} />
+        <SpeechToText
+          ref={voiceRef}
+          isRecording={isVoiceRecording}
+          controlRecordingVoice={controlRecordingVoice}
+        />
         <VoiceColor ref={voiceColorRef} isRecording={isVoiceColorRecording} />
       </div>
 
@@ -125,7 +132,7 @@ function Home() {
           <svg
             className="mic-img"
             viewBox="3 1.5 13 13"
-            onClick={startRecordingVoice}
+            onClick={controlRecordingVoice}
             fill={isVoiceRecording ? "rgb(96, 189, 239)" : "rgb(149, 207, 239)"}
           >
             <path
