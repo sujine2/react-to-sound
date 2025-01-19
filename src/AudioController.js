@@ -101,7 +101,7 @@ export class AudioController {
             sampleSize: 16,
             channel: 1,
             bigEndian: false,
-            isFinal: false,
+            last: false,
           };
 
           try {
@@ -137,7 +137,7 @@ export class AudioController {
       sampleSize: 32,
       channel: 1,
       bigEndian: false,
-      isFinal: true,
+      last: true,
     };
     try {
       this.socket.send(JSON.stringify(audioDataObj));
