@@ -286,40 +286,48 @@ span.lit {
   height: 65vh;
   display: flex;
   flex-direction: column; /* 세로로 정렬 */
-  font-size: clamp(20px, 1.3vw, 30px);
+  font-size: clamp(15px, 1.3vw, 30px);
+  overflow: scroll;
+  overflow-y: auto;
+  padding-bottom: 5px;
+  scroll-behavior: smooth;
+}
+
+.chat-message-container::-webkit-scrollbar {
+  display: none;
 }
 
 .chat-req-message {
-  width: 50%;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
   align-self: flex-end; /* 오른쪽 정렬 */
   text-align: right;
-  padding: 2%;
-  margin: 1%;
+  right: 0;
   background-color: rgb(129, 197, 234);
 }
 
+.chat-req-message,
 .chat-res-message {
-  width: 50%;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  align-self: flex-start; /* 왼쪽 정렬 */
-  text-align: left;
+  word-wrap: break-word;
+  max-width: 70%; /* 최대 너비 제한 */
+  min-width: 50px; /* 최소 너비 */
   padding: 2%;
   margin: 1%;
+}
+
+.chat-res-message {
+  align-self: flex-start; /* 왼쪽 정렬 */
+  text-align: left;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .chat-container {
   width: clamp(350px, 60vw, 900px);
   /* width: 60vw; */
-  height: 80vh;
+  height: 100vh;
   border-radius: 50px;
   /* background: rgba(255, 255, 255, 0.3);
   box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
@@ -332,7 +340,25 @@ span.lit {
   margin: 0 auto;
   border-radius: 50px;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(20px, 1.5vw, 30px);
+  display: flex;
+  justify-content: space-between; /* 양쪽 끝으로 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
+}
+
+.chat-enter-mic-img {
+  margin-left: 20px;
+  height: clamp(40px, 15vw, 50px);
+  border-radius: 50%;
+  transition: all 0.2s linear;
+}
+
+.chat-enter-send {
+  margin-right: 20px;
+  height: clamp(40px, 15vw, 50px);
+  border-radius: 50%;
+  transition: all 0.2s linear;
 }
 
 @keyframes blow {
