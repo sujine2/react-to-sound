@@ -1,6 +1,6 @@
 
 # Main
-![Image](https://github.com/user-attachments/assets/07159f40-abba-46cc-b0cc-39350096597b)
+![Image](https://github.com/user-attachments/assets/1833e2e0-725c-475c-a53b-e4349212c152)
 
 ### A voice-recognized self-introduction using a virtual character, "Jine," to represent me
 
